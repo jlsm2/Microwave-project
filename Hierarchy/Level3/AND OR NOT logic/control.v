@@ -10,7 +10,7 @@ module control (
     assign rS = (!startn  && door_closed) ? 1 : 0;
     assign rR = (!stopn || timer_done || !door_closed || !clearn) ? 1 : 0;
 	
-  	latchsr LSR_ON(.S(rS), .R(rR), .Q(rQ));
+  	sr_latch LSR_ON(.S(rS), .R(rR), .Q(rQ));
   	
   	assign mag_on = rQ;
     
