@@ -13,7 +13,7 @@ module sr_latch_tb;
   always #5 S = ~S;
   
   initial begin
-    $dumpfile("dump.vcd"); 
+    $dumpfile("latch.vcd"); 
     $dumpvars;
   end
   
