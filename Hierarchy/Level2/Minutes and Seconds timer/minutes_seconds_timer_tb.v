@@ -1,10 +1,13 @@
+`include "MinutesSecondsTimer.v"
+`timescale 1s/1s
+
 module MinutesSecondsTimer_tb;
 
     reg CLK;
     reg Reset;
 
     wire [3:0] seconds_units;
-    wire [3:0] seconds_tens;
+    wire [2:0] seconds_tens;
     wire [3:0] minutes_units;
 
     MinutesSecondsTimer uut (
@@ -16,7 +19,7 @@ module MinutesSecondsTimer_tb;
     );
 
     initial begin
-          $dumpfile("dump.vcd");
+        $dumpfile("dump.vcd");
         $dumpvars();
     end
 
@@ -31,7 +34,11 @@ module MinutesSecondsTimer_tb;
 
         #10 Reset = 0;
 
-        #1000 $finish;
+        #200 Reset = 1;
+
+        #50 Reset = 0;
+
+        #5990 $finish;
     end
 
 endmodule
