@@ -70,11 +70,16 @@ initial begin
     rst = 0;
     #(CLK_PERIOD * 100);
     
-  	switches = 10'b0001000000; // 100 in binary
+  	switches = 10'b0000000000; // 100 in binary
     #(CLK_PERIOD * 100);
     // Complete the simulation
+  	switches = 10'b0001000000; // 100 in binary
+    #(CLK_PERIOD * 100);
   
-  	switches = 10'b0000100000; // 100 in binary
+  	switches = 10'b0000000000; // 100 in binary
+    #(CLK_PERIOD * 100);
+  
+  	switches = 10'b0001000000; // 100 in binary
     #(CLK_PERIOD * 100);
     $finish;
 end
