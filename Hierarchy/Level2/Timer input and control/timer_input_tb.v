@@ -1,5 +1,3 @@
-`include "timer_input.v"
-
 module MicrowaveTimer_tb;
 
 // Parameters for the test bench
@@ -15,18 +13,18 @@ wire [3:0] tens_of_seconds;
 wire [3:0] encoded_input; // Add encoded_input to test bench
 
 // Instance of the MicrowaveTimer module
-MicrowaveTimer uut(
+timer_input uut(
     .clk(clk),
     .rst(rst),
     .switches(switches),
     .units_of_seconds(units_of_seconds),
     .units_of_minutes(units_of_minutes),
-    .tens_of_seconds(tens_of_seconds)
+  	.tens_of_seconds(tens_of_seconds)
 );
 
 // Instance of the priority_encoder_4x2 module
 priority_encoder_4x2 encoder (
-    .enable(1),
+  	.enable(1),
     .number(switches),
     .clk(clk),
     .encoded(encoded_input)
@@ -66,11 +64,18 @@ initial begin
     
     // Test case 5: Reset the system
     rst = 1;
-    #(CLK_PERIOD * 50);
+  	switches = 10'b0001000000; // 100 in binary
+    #(CLK_PERIOD * 100);
+  
     rst = 0;
     #(CLK_PERIOD * 100);
     
+  	switches = 10'b0001000000; // 100 in binary
+    #(CLK_PERIOD * 100);
     // Complete the simulation
+  
+  	switches = 10'b0000100000; // 100 in binary
+    #(CLK_PERIOD * 100);
     $finish;
 end
 
