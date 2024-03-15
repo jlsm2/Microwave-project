@@ -1,3 +1,6 @@
+`include "priority_encoder_4x2.v"
+`include "counter_0_to_7_non_recycling.v"
+
 module timer_input (
     input wire clk,
     input wire rst,
@@ -9,6 +12,7 @@ module timer_input (
 
 // Internal signals
 wire [3:0] encoded_input;
+  reg [3:0] enc;
 reg [3:0] last_input;
 wire [2:0] counter;
 
@@ -21,6 +25,7 @@ priority_encoder_4x2 encoder (
     .encoded(encoded_input)
 );
 
+
 counter_0_to_7_non_recycling counter_inst (
     .clk(clk),
     .rst(rst),
@@ -29,7 +34,7 @@ counter_0_to_7_non_recycling counter_inst (
 
 always @(posedge clk or posedge rst) begin
     if (rst) begin
-        last_input <= 4'b0000;
+        last_input <= encoded_input;
         units_of_seconds <= 4'b0000;
         units_of_minutes <= 4'b0000;
         tens_of_seconds <= 4'b0000;
@@ -37,10 +42,10 @@ always @(posedge clk or posedge rst) begin
         // Detect change in input
         if (encoded_input != last_input) begin
             // Update timer values
-            tens_of_seconds <= units_of_seconds; // Fix this line
-            units_of_minutes <= tens_of_seconds; // Move this line up
+            tens_of_seconds <= units_of_seconds;
+            units_of_minutes <= tens_of_seconds;
             units_of_seconds <= encoded_input;
-            last_input <= encoded_input;
+          	last_input <= encoded_input;
         end
     end
 end
