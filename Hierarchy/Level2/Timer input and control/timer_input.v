@@ -40,11 +40,13 @@ always @(posedge clk or posedge rst) begin
         tens_of_seconds <= 4'b0000;
     end else begin
         // Detect change in input
-        if (encoded_input != last_input) begin
+      if (encoded_input != last_input ) begin
             // Update timer values
+        if(encoded_input != 4'b1111) begin
             tens_of_seconds <= units_of_seconds;
             units_of_minutes <= tens_of_seconds;
             units_of_seconds <= encoded_input;
+        end
           	last_input <= encoded_input;
         end
     end
