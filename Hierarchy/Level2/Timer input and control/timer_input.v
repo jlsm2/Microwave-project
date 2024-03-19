@@ -8,13 +8,16 @@ module timer_input (
     output reg loadn, // Added loadn output
 	 output wire [6:0] outMin,       // Output for displaying minutes
     output wire [6:0] outTenSec,    // Output for displaying tens of seconds
-    output wire [6:0] outSec
+  output wire [6:0] outSec,
+  output wire pgt_1Hz
 );
 
 // Internal signals
 wire [3:0] encoded_input;
 reg [3:0] last_input;
 wire [2:0] counter;
+wire mux_a;
+wire mux_b;
 
 // Instantiate modules
 
@@ -22,13 +25,14 @@ priority_encoder_4x2 encoder (
   .enable(1'b1),
     .number(switches),
     .clk(clk),
-    .encoded(encoded_input)
+  .encoded(encoded_input)
 );
 
 counter_0_to_7_non_recycling counter_inst (
     .clk(clk),
     .rst(enablen), // Changed from rst to enablen
-    .count(counter)
+  .count(counter),
+  .out(mux_a)
 );
 
 decoder decoder_inst (
@@ -39,6 +43,17 @@ decoder decoder_inst (
   .OutTenSec(outTenSec),
   .OutSec(outSec)
 );
+ 
+ContadorFreq100 cf( 
+  .clk_100Hz(clk),
+  .Hz1(mux_b) 
+  );
+
+ mux2_to_1 mux(
+   .a(mux_a), 
+   .b(mux_b), 
+   .sel(enablen), 
+   .Q(pgt_1Hz));
 
 always @(posedge clk or posedge ~enablen) begin // Changed from rst to enablen
     if (~enablen) begin // Changed from rst to enablen
