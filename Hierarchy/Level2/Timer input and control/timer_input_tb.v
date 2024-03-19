@@ -32,12 +32,12 @@ end
 // Test stimulus
 initial begin
     // Initialize inputs
-    enablen = 1; // Changed from rst to enablen
+    enablen = 0; // Changed from rst to enablen
     switches = 10'b0;
     
     // Reset the system
     #(CLK_PERIOD * 10);
-    enablen = 0; // Changed from rst to enablen
+    enablen = 1; // Changed from rst to enablen
     #(CLK_PERIOD * 10);
     
     // Test case 1: No input change
@@ -56,11 +56,11 @@ initial begin
     #(CLK_PERIOD * 100);
     
     // Test case 5: Reset the system
-    enablen = 1;
+    enablen = 0;
   	switches = 10'b0001000000; // 100 in binary
     #(CLK_PERIOD * 100);
   
-    enablen = 0;
+    enablen = 1;
     #(CLK_PERIOD * 100);
     
   	switches = 10'b0000000000; // 100 in binary
