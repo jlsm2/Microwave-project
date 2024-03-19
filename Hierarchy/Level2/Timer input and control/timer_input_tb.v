@@ -1,33 +1,26 @@
-module MicrowaveTimer_tb;
+module timer_input_tb;
 
 // Parameters for the test bench
 parameter CLK_PERIOD = 10; // 100MHz clock for the sake of the example
 
 // Test bench signals
 reg clk;
-reg rst;
+reg enablen; // Changed from rst to enablen
 reg [9:0] switches;
 wire [3:0] units_of_seconds;
 wire [3:0] units_of_minutes;
 wire [3:0] tens_of_seconds;
-wire [3:0] encoded_input; // Add encoded_input to test bench
+wire loadn; // Added loadn to test bench
 
-// Instance of the MicrowaveTimer module
+// Instance of the timer_input module
 timer_input uut(
     .clk(clk),
-    .rst(rst),
+    .enablen(enablen), // Changed from rst to enablen
     .switches(switches),
     .units_of_seconds(units_of_seconds),
     .units_of_minutes(units_of_minutes),
-  	.tens_of_seconds(tens_of_seconds)
-);
-
-// Instance of the priority_encoder_4x2 module
-priority_encoder_4x2 encoder (
-  	.enable(1),
-    .number(switches),
-    .clk(clk),
-    .encoded(encoded_input)
+    .tens_of_seconds(tens_of_seconds),
+    .loadn(loadn) // Added loadn to test bench
 );
 
 // Clock generation
@@ -39,12 +32,12 @@ end
 // Test stimulus
 initial begin
     // Initialize inputs
-    rst = 1;
+    enablen = 1; // Changed from rst to enablen
     switches = 10'b0;
     
     // Reset the system
     #(CLK_PERIOD * 10);
-    rst = 0;
+    enablen = 0; // Changed from rst to enablen
     #(CLK_PERIOD * 10);
     
     // Test case 1: No input change
@@ -63,11 +56,11 @@ initial begin
     #(CLK_PERIOD * 100);
     
     // Test case 5: Reset the system
-    rst = 1;
+    enablen = 1;
   	switches = 10'b0001000000; // 100 in binary
     #(CLK_PERIOD * 100);
   
-    rst = 0;
+    enablen = 0;
     #(CLK_PERIOD * 100);
     
   	switches = 10'b0000000000; // 100 in binary
@@ -84,12 +77,12 @@ initial begin
     $finish;
 end
 
-// Optionally, monitor changes to certain signals
+
 initial begin
     $dumpfile("simulation.vcd"); // Set the VCD filename
-    $dumpvars(0, MicrowaveTimer_tb); // Dump all variables
-    $monitor("Time = %t | rst = %b | switches = %b | encoded_input = %b | units_of_seconds = %b | units_of_minutes = %b | tens_of_seconds = %b",
-             $time, rst, switches, encoded_input, units_of_seconds, units_of_minutes, tens_of_seconds);
+    $dumpvars(0, timer_input_tb); // Dump all variables
+    $monitor("Time = %t | enablen = %b | switches = %b | units_of_seconds = %b | units_of_minutes = %b | tens_of_seconds = %b | loadn = %b",
+             $time, enablen, switches, units_of_seconds, units_of_minutes, tens_of_seconds, loadn);
 end
   
 endmodule
