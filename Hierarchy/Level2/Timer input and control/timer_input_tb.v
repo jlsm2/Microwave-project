@@ -2,7 +2,7 @@ module timer_input_tb;
 
 // Parameters for the test bench
 parameter CLK_PERIOD = 10; // 100MHz clock for the sake of the example
-
+ 
 // Test bench signals
 reg clk;
 reg enablen; // Changed from rst to enablen
@@ -15,7 +15,7 @@ wire loadn; // Added loadn to test bench
 // Instance of the timer_input module
 timer_input uut(
     .clk(clk),
-    .enablen(enablen), // Changed from rst to enablen
+  	.enablen(enablen), // Changed from rst to enablen
     .switches(switches),
     .units_of_seconds(units_of_seconds),
     .units_of_minutes(units_of_minutes),
