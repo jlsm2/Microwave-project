@@ -1,6 +1,3 @@
-`include "priority_encoder_4x2.v"
-`include "counter_0_to_7_non_recycling.v"
-
 module timer_input (
     input wire clk,
     input wire enablen, // Changed from rst to enablen
@@ -8,12 +5,14 @@ module timer_input (
     output reg [3:0] units_of_seconds,
     output reg [3:0] units_of_minutes,
     output reg [3:0] tens_of_seconds,
-    output reg loadn // Added loadn output
+    output reg loadn, // Added loadn output
+	 output wire [6:0] outMin,       // Output for displaying minutes
+    output wire [6:0] outTenSec,    // Output for displaying tens of seconds
+    output wire [6:0] outSec
 );
 
 // Internal signals
 wire [3:0] encoded_input;
-reg [3:0] enc;
 reg [3:0] last_input;
 wire [2:0] counter;
 
@@ -32,8 +31,17 @@ counter_0_to_7_non_recycling counter_inst (
     .count(counter)
 );
 
-always @(posedge clk or posedge enablen) begin // Changed from rst to enablen
-    if (enablen) begin // Changed from rst to enablen
+decoder decoder_inst (
+  .Min(units_of_minutes),
+  .TenSec(tens_of_seconds),
+  .Sec(units_of_seconds),
+  .OutMin(outMin),
+  .OutTenSec(outTenSec),
+  .OutSec(outSec)
+);
+
+always @(posedge clk or posedge ~enablen) begin // Changed from rst to enablen
+    if (~enablen) begin // Changed from rst to enablen
         last_input <= encoded_input;
         units_of_seconds <= 4'b0000;
         units_of_minutes <= 4'b0000;
