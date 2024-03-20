@@ -19,10 +19,10 @@ wire mux_b;
 // Instantiate modules
 
 priority_encoder_4x2 encoder (
-  .enable(1'b1),
+    .enable(enablen),
     .number(switches),
     .clk(clk),
-  .encoded(encoded_input)
+    .encoded(encoded_input)
 );
 
 counter_0_to_7_non_recycling counter_inst (
