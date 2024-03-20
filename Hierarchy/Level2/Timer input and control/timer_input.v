@@ -5,11 +5,8 @@ module timer_input (
     output reg [3:0] units_of_seconds,
     output reg [3:0] units_of_minutes,
     output reg [3:0] tens_of_seconds,
-    output reg loadn, // Added loadn output
-	 output wire [6:0] outMin,       // Output for displaying minutes
-    output wire [6:0] outTenSec,    // Output for displaying tens of seconds
-  output wire [6:0] outSec,
-  output wire pgt_1Hz
+    output reg loadn,
+    output wire pgt_1Hz
 );
 
 // Internal signals
@@ -33,15 +30,6 @@ counter_0_to_7_non_recycling counter_inst (
     .rst(enablen), // Changed from rst to enablen
   .count(counter),
   .out(mux_a)
-);
-
-decoder decoder_inst (
-  .Min(units_of_minutes),
-  .TenSec(tens_of_seconds),
-  .Sec(units_of_seconds),
-  .OutMin(outMin),
-  .OutTenSec(outTenSec),
-  .OutSec(outSec)
 );
  
 ContadorFreq100 cf( 
