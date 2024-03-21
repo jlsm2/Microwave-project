@@ -13,8 +13,7 @@ always @(posedge clk) begin
     if (enable) begin
         number_reg <= number;
         case(number_reg)
-            10'b0000000000: encoded_reg <= 4'b1111;
-          	10'b1000000000: encoded_reg <= 4'b0000;
+				10'b1000000000: encoded_reg <= 4'b0000;
             10'b0100000000: encoded_reg <= 4'b0001;
             10'b0010000000: encoded_reg <= 4'b0010;
             10'b0001000000: encoded_reg <= 4'b0011;
@@ -24,8 +23,9 @@ always @(posedge clk) begin
             10'b0000000100: encoded_reg <= 4'b0111;
             10'b0000000010: encoded_reg <= 4'b1000;
             10'b0000000001: encoded_reg <= 4'b1001;
+				default: encoded_reg <= 4'b1111;
         endcase
-        if (debounce_counter < 4'd3) begin
+        if (debounce_counter < 4'b0011) begin
             debounce_counter <= debounce_counter + 1;
         end else begin
             encoded <= encoded_reg;
@@ -33,7 +33,7 @@ always @(posedge clk) begin
     end else begin
         encoded <= 4'b0000;
         number_reg <= 10'b0;
-        debounce_counter <= 4'd0;
+        debounce_counter <= 4'b0;
     end
 end
 
