@@ -1,3 +1,8 @@
+`include "a.sv"
+`include "b.sv"
+`include "c.sv"
+`include "d.sv"
+`include "e.sv"
 module timer_input (
     input wire clk,
     input wire enablen,
@@ -11,21 +16,22 @@ module timer_input (
 
 wire [3:0] encoded_input;
 reg [3:0] last_input;
-wire [2:0] counter;
 wire mux_a;
 wire mux_b;
+wire int_clr;
 
 priority_encoder_4x2 encoder (
     .enable(enablen),
     .number(switches),
     .clk(clk),
-    .encoded(encoded_input)
+  .encoded(encoded_input),
+  .all_off(int_clr)
 );
 
 counter_0_to_7_non_recycling counter_inst (
     .clk(clk),
-    .rst(~enablen),
-	 .count(counter)
+  .rst(int_clr),
+  .out(mux_a)
 );
  
 f100 cf( 
@@ -41,7 +47,6 @@ f100 cf(
 );
 
 always @(posedge clk) begin
-
 	 if (~enablen) begin
         last_input <= encoded_input;
         units_of_seconds <= 4'b1111;
