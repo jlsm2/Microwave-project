@@ -2,7 +2,8 @@ module priority_encoder_4x2(
     input enable,
     input [9:0] number,
     input clk,
-    output reg [3:0] encoded
+  output reg [3:0] encoded,
+  output wire all_off
 );
 
 reg [9:0] number_reg;
@@ -36,5 +37,7 @@ always @(posedge clk) begin
         debounce_counter <= 4'b0;
     end
 end
+  
+  assign all_off = (switches == 10'b000000000);
 
 endmodule
