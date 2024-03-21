@@ -1,19 +1,34 @@
-module counter_0_to_7_non_recycling(
-    input clk,
-    input rst,
-  output reg [2:0] count
+module counter_0_to_7_non_recycling (
+    input wire rst,
+    input wire clk,
+    output reg out=0
 );
 
-always @(posedge clk or posedge rst) begin
-    if (rst) begin
-        count <= 3'b000;
-    end else begin
-        if (count == 3'b111) begin
-            count <= 3'b000;
-		  end else begin
-			   count <= count + 1;
+    reg [2:0] cnt = 3'd0;
+    reg counting = 0;
+
+  always @ (posedge rst) begin
+        if (cnt == 3'd7) begin
+            counting = 0;
+            cnt = 3'd0;
+            out = 0;
         end
     end
-end
 
+  always @ (negedge rst) begin
+        if (cnt == 3'd0) begin
+            counting = 1;
+        end
+    end
+
+    always @ (posedge clk) begin
+        if (cnt < 3'd7 && counting == 1) begin
+            cnt <= cnt + 1;
+        end
+
+        if(cnt == 3'd3) begin
+            out <= 1;            
+        end
+    end
+    
 endmodule
