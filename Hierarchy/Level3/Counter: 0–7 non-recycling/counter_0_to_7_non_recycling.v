@@ -1,8 +1,7 @@
 module counter_0_to_7_non_recycling(
     input clk,
     input rst,
-  output reg [2:0] count,
-  output reg out=0
+  output reg [2:0] count
 );
 
 always @(posedge clk or posedge rst) begin
@@ -11,10 +10,8 @@ always @(posedge clk or posedge rst) begin
     end else begin
         if (count == 3'b111) begin
             count <= 3'b000;
-        end else if (count == 3'b011) begin 
-          	out <=1;
-          end else begin
-            count <= count + 1;
+		  end else begin
+			   count <= count + 1;
         end
     end
 end
