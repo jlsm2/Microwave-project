@@ -10,11 +10,11 @@ module microwave (
 wire [3:0] units_of_seconds;
 wire [3:0] units_of_minutes;
 wire [3:0] tens_of_seconds;
-wire loadn;
 wire [3:0] seconds_units;
 wire [3:0] minutes_units;
 wire [3:0] seconds_tens;
-
+wire loadn;
+wire load;
 
 level2_control magnetron (
     .startn(startn),
@@ -36,10 +36,13 @@ timer_input t_input (
    .pgt_1Hz(pgt_1Hz)
 );
 
+assign load = loadn;
+
 minutes_seconds_timer timer(
-    .CLK(pgt_1Hz),
-    .Load(loadn),
+    .CLK(startn),
+    .Load(load),
    .Enable(magn_on),
+	.Clearn(clearn),
     .initial_seconds_units(units_of_seconds),
     .initial_seconds_tens(tens_of_seconds),
     .initial_minutes_units(units_of_minutes),
